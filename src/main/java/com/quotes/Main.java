@@ -10,17 +10,15 @@ public class Main {
     public static RequestManager requestManager = new RequestManager();
 
     public static void main(String[] args) throws IOException {
-        requestManager.userRequest();
-        if (requestManager.getResponse() != null) {
-            //check file existence and display the results
+
+
             boolean fileExist = fileManager.CheckAndCreateFile();
             if (fileExist) {
                 fileManager.ReadJSONFile();
             } else if (!fileExist) {
-                requestManager.userRequest();
-                fileManager.storeTheData(requestManager.getResponse());
+                fileManager.storeTheData(requestManager.userRequest());
                 fileManager.ReadJSONFile();
             }
         }
     }
-}
+

@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,18 +31,22 @@ public class FileManager {
         File file = new File(Data_FILE_PATH);
         if (file.exists()) {
             System.out.println("File exists.");
+            System.out.println();
             return true;
         } else {
             try {
                 if (file.createNewFile()) {
                     System.out.println("File created: " + Data_FILE_PATH);
+                    System.out.println();
                     return false;
                 } else {
                     System.out.println("File creation failed.");
+                    System.out.println();
                     return false;
                 }
             } catch (IOException e) {
                 System.out.println("An error occurred while creating the file.");
+                System.out.println();
                 e.printStackTrace();
                 return false;
             }
@@ -51,38 +56,31 @@ public class FileManager {
     public void ReadJSONFile() {
         Gson gson = new Gson();
         try (BufferedReader reader = new BufferedReader(new FileReader(Data_FILE_PATH))) {
-            Type type = new TypeToken<HashMap<String, Object>>() {
-            }.getType();
-            Map<String, Object> map = gson.fromJson(reader, type);
+            Type type = new TypeToken<Map<String, Object>>() {}.getType();
+            Map<String, Object> quoteResponse = gson.fromJson(reader, type);
             //check key validation
             try {
-                //display the desired data
-                List<Object> contents = (List<Object>) map.get("contents");
-                Map<String, Object> contentsMap = (Map<String, Object>) contents.get(0);
+                Map<String, Object> contents = (Map<String, Object>) quoteResponse.get("contents");
+                ArrayList<Map<String, Object>> quotes = (ArrayList<Map<String, Object>>) contents.get("quotes");
+                Map<String, Object> quote = quotes.get(0);
+                String quoteText = (String) quote.get("quote");
 
-                //check if the destination is valid
-                try {
-                    List<Object> quotes = (List<Object>) contentsMap.get("quote");
-                    Map<String, Object> quotesMap = (Map<String, Object>) quotes.get(0);
-
-                    //Map<String, Object> quoteMap = (Map<String, Object>) quotesMap.get("quote");
-                    String value = (String) quotesMap.get("quote");
-
-                    System.out.println("The Quote Of Today: " + value);
-                } catch (NullPointerException e) {
-                    System.out.println();
-                    System.out.println("Not Found, please try again");
-                }
-            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Quote: " + quoteText);
+            } catch (NullPointerException e) {
                 System.out.println();
-                System.out.println("Not Found, please check your key");
+                System.out.println("Not Found, please try again");
             }
-
+        } catch (IndexOutOfBoundsException | FileNotFoundException e) {
+            System.out.println();
+            System.out.println("Not Found, please check your key");
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
+
     }
+
+
 
     public static final String Data_FILE_PATH = "data/quote.json";
 }

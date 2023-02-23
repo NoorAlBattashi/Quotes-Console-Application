@@ -13,40 +13,38 @@ import java.util.HashMap;
 
 public class RequestManager {
     String json;
+
     public RequestManager() {
 
     }
 
-    public void userRequest() throws IOException {
+    public String userRequest() throws IOException {
         OkHttpClient client = new OkHttpClient();
-
+        String responseBody;
         Request request = new Request.Builder()
                 .url("https://quotes.rest/qod.json")
                 .get()
                 .build();
+
         try (Response response = client.newCall(request).execute()) {
-//            if (!response.isSuccessful()) {
-//                throw new IOException("Unexpected code " + response);
-//            }
-            String responseBody = response.body().string();
+            responseBody = response.body().string(); // Save the response body to a variable
+            // System.out.println(responseBody);
             if (responseBody.contains("error")) {
-                // Handle the error response
-//                System.out.println("Error response: " + responseBody);
-                System.out.println("To many requests, please wait for 31 min then make new request");
+                System.out.println("Too many requests, please wait for 31 minutes and try again");
             } else {
-                Gson gson = new Gson();
-                Type type = new TypeToken<HashMap<String, Object>>() {
-                }.getType();
-                System.out.println(response.body().string());
-                this.json = response.body().string();
+//                Gson gson = new Gson();
+//                Type type = new TypeToken<HashMap<String, Object>>() {}.getType();
+//                HashMap<String, Object> quoteResponse = gson.fromJson(responseBody, type);
+//
+//                // Do something with the deserialized response
+//                //System.out.println("Quote: " + quoteResponse.get("quote"));
+                return responseBody;
             }
-        } catch (Exception e) {
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
-    }
-
-    public String getResponse() {
-        return this.json;
+        return null;
     }
 }
+
