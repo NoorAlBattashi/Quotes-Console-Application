@@ -1,7 +1,5 @@
 package com.quotes;
 
-import com.google.gson.Gson;
-
 import java.io.IOException;
 
 
@@ -10,7 +8,6 @@ public class Main {
     public static RequestManager requestManager = new RequestManager();
 
     public static void main(String[] args) throws IOException {
-
 
             boolean fileExist = fileManager.CheckAndCreateFile();
             if (fileExist) {

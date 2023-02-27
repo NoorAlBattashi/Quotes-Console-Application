@@ -6,10 +6,11 @@ import com.google.gson.reflect.TypeToken;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+/**
+ * The FileManager class is responsible for managing the storage, retrieval and creation of quote data
+ */
 public class FileManager {
 
 
@@ -27,6 +28,11 @@ public class FileManager {
         }
     }
 
+    /**
+     * This method checks for the existence of the data file and creates it if it does not exist
+     *
+     * @return boolean true if file exists, false otherwise
+     */
     public boolean CheckAndCreateFile() {
         File file = new File(Data_FILE_PATH);
         if (file.exists()) {
@@ -53,10 +59,14 @@ public class FileManager {
         }
     }
 
+    /**
+     * This method reads data from the file and retrieves a quote
+     */
     public void ReadJSONFile() {
         Gson gson = new Gson();
         try (BufferedReader reader = new BufferedReader(new FileReader(Data_FILE_PATH))) {
-            Type type = new TypeToken<Map<String, Object>>() {}.getType();
+            Type type = new TypeToken<Map<String, Object>>() {
+            }.getType();
             Map<String, Object> quoteResponse = gson.fromJson(reader, type);
             //check key validation
             try {
@@ -80,8 +90,9 @@ public class FileManager {
 
     }
 
-
-
+    /**
+     * The file path for the quote data file
+     */
     public static final String Data_FILE_PATH = "data/quote.json";
 }
 

@@ -1,23 +1,30 @@
 package com.quotes;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.HashMap;
 
+/**
+ * The RequestManager class is responsible for sending HTTP requests to the quotes API
+ * and returning the response body as a string.
+ * It uses the OkHttp library for making HTTP requests and the Gson library for parsing JSON data.
+ */
 public class RequestManager {
-    String json;
-
+    /**
+     * Creates a new RequestManager object.
+     */
     public RequestManager() {
 
     }
 
+    /**
+     * Sends a GET request to the quotes API and returns the response body as a string.
+     *
+     * @return the response body as a string
+     * @throws IOException if an error occurs while sending the request or receiving the response
+     */
     public String userRequest() throws IOException {
         OkHttpClient client = new OkHttpClient();
         String responseBody;
@@ -28,16 +35,9 @@ public class RequestManager {
 
         try (Response response = client.newCall(request).execute()) {
             responseBody = response.body().string(); // Save the response body to a variable
-            // System.out.println(responseBody);
             if (responseBody.contains("error")) {
                 System.out.println("Too many requests, please wait for 31 minutes and try again");
             } else {
-//                Gson gson = new Gson();
-//                Type type = new TypeToken<HashMap<String, Object>>() {}.getType();
-//                HashMap<String, Object> quoteResponse = gson.fromJson(responseBody, type);
-//
-//                // Do something with the deserialized response
-//                //System.out.println("Quote: " + quoteResponse.get("quote"));
                 return responseBody;
             }
 
